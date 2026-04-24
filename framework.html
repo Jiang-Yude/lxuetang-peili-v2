@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>旅學堂 陪力卡 · 完整框架</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red-1: #B64A32; --red-2: #9B3A23; --red-ink: #6E2614;
+    --cream: #FBEFE8; --cream-2: #F5E3D7; --paper: #FFF8F3;
+    --ink: #2B2018; --ink-2: #4A3B30; --ink-3: #6D5A4B;
+    --mute: #9A8879;
+    --rule: #E8D8C8; --rule-strong: #C9B49E;
+    --gold: #C79550; --gold-soft: #EFD9AC;
+
+    --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif;
+    --sans: "Noto Sans TC", "PingFang TC", -apple-system, "Helvetica Neue", system-ui, sans-serif;
+    --mono: "Inter", ui-monospace, system-ui, sans-serif;
+
+    --maxw: 1080px;
+    --base: 17px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
+    font-size: var(--base);
+    line-height: 1.9;
+    letter-spacing: .01em;
+  }
+  a{color:inherit; text-decoration:none}
+
+  /* top bar */
+  .topbar{
+    position: sticky; top:0; z-index:50;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 10px 28px;
+    display:flex; align-items:center; gap:20px;
+  }
+  .brandmark{ display:flex; align-items:center; gap:10px; }
+  .brandmark img{ height: 30px; width:auto; }
+  .brandmark .wordmark{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .14em;
+    color: var(--red-ink);
+  }
+  .topnav{ margin-left:auto; display:flex; gap: 22px; align-items:center }
+  .topnav a{
+    font-size: 13.5px;
+    color: var(--ink-2);
+    padding: 2px 0;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .topnav a:hover{ color: var(--red-ink); border-bottom-color: var(--red-ink); }
+  .topnav a.current{ color: var(--red-ink); border-bottom-color: var(--red-ink); }
+
+  /* page header */
+  .page-head{
+    background: var(--red-2);
+    color: #fff;
+    padding: 80px 28px 70px;
+    position: relative;
+  }
+  .page-head::after{
+    content: "";
+    position: absolute; left:0; right:0; bottom: -1px; height: 40px;
+    background: var(--cream);
+    clip-path: polygon(0 100%, 100% 100%, 100% 60%, 0 0);
+  }
+  .page-head-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    text-align: center;
+  }
+  .page-head .kicker{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .32em;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .page-head h1{
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    margin: 0 0 16px;
+    line-height: 1.25;
+  }
+  .page-head .sub{
+    font-family: var(--serif);
+    font-size: 17px;
+    color: rgba(255,255,255,.75);
+    letter-spacing: .14em;
+    margin: 0;
+  }
+  .rule-gold{
+    display: block;
+    width: 64px; height: 2px;
+    background: var(--gold);
+    margin: 28px auto 0;
+    opacity: .85;
+  }
+
+  /* container */
+  .wrap{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* lead prose */
+  .lead{
+    padding: 70px 0 40px;
+  }
+  .lead blockquote{
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 2;
+    color: var(--ink);
+    font-weight: 500;
+    margin: 0 0 28px;
+    padding: 0 0 0 24px;
+    border-left: 3px solid var(--red-1);
+    letter-spacing: .04em;
+  }
+  .lead p{
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 2;
+    color: var(--ink-2);
+    margin: 0 0 22px;
+    letter-spacing: .02em;
+  }
+  .lead p strong{
+    color: var(--red-ink);
+    font-weight: 700;
+  }
+
+  /* stage overview */
+  .overview{
+    margin: 24px 0 60px;
+    padding: 28px 32px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+  .overview h2{
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .3em;
+    color: var(--red-ink);
+    margin: 0 0 18px;
+  }
+  .overview .flow{
+    display:flex; flex-wrap:wrap; gap: 10px 14px;
+    align-items:center;
+    font-family: var(--serif);
+  }
+  .overview .flow .stage-pill{
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--ink);
+  }
+  .overview .flow .stage-pill small{
+    display: inline-block;
+    margin-left: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--mute);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .overview .flow .arrow{
+    color: var(--red-1);
+    opacity: .7;
+    font-size: 14px;
+  }
+
+  /* stage blocks */
+  .stage{
+    margin: 56px 0 48px;
+    scroll-margin-top: 80px;
+  }
+  .stage-head{
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .stage-head .stage-no{
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .28em;
+    color: var(--red-1);
+  }
+  .stage-head h2{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: .14em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .stage-head .en{
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: .18em;
+    color: var(--mute);
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+  .stage-head .facet{
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink-3);
+    letter-spacing: .14em;
+  }
+  .stage-intro{
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 2;
+    color: var(--ink-2);
+    margin: 0 0 32px;
+  }
+
+  .cards{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .card-row{
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 28px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card-row:last-child{ border-bottom: none; }
+  .card-row .card-id{
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    color: var(--red-1);
+    padding-top: 4px;
+  }
+  .card-row .card-id small{
+    display:block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .24em;
+    color: var(--mute);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .card-row .card-body h3{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: .1em;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .card-row .card-body .tagline{
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .22em;
+    color: var(--red-ink);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-row .card-body p{
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 2;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  /* return cta */
+  .return{
+    margin: 72px 0 0;
+    padding: 40px 32px;
+    border-top: 1px dashed var(--rule-strong);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .return .tx{
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink-2);
+    letter-spacing: .06em;
+  }
+  .return a{
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    color: var(--red-ink);
+    padding: 12px 22px;
+    border: 1.5px solid var(--red-ink);
+    border-radius: 2px;
+    transition: background .25s, color .25s;
+  }
+  .return a:hover{ background: var(--red-ink); color: #fff; }
+
+  /* footer */
+  footer{
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    padding: 36px 28px;
+    background: var(--cream-2);
+  }
+  .foot-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display:flex; justify-content: space-between; align-items:center; gap: 24px;
+    flex-wrap:wrap;
+    font-size: 13px;
+    color: var(--ink-3);
+    letter-spacing: .06em;
+  }
+  .foot-inner a{ color: var(--red-ink); border-bottom: 1px solid var(--rule-strong); }
+
+  @media (max-width: 720px){
+    .page-head h1{ font-size: 32px; }
+    .stage-head{ flex-wrap: wrap; }
+    .stage-head h2{ font-size: 26px; }
+    .stage-head .en{ margin-left: 0; width: 100%; }
+    .card-row{ grid-template-columns: 1fr; gap: 8px; }
+    .card-row .card-id{ font-size: 13px; }
+    .lead blockquote{ font-size: 18px; }
+    .lead p{ font-size: 16px; }
+  }
+</style>
+</head>
+<body id="top">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brandmark" href="index.html">
+      <img src="assets/logo.webp" alt="旅學堂 Tamsui Traveler" />
+      <span class="wordmark">旅學堂</span>
+    </a>
+    <nav class="topnav">
+      <a href="index.html">首頁</a>
+      <a href="framework.html" class="current">完整框架</a>
+      <a href="index.html#results">2026 年度成果</a>
+      <a href="https://www.tamsuitraveler.com/" target="_blank" rel="noopener">官方網站</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-head">
+  <div class="page-head-inner">
+    <div class="kicker">Companionship Framework · Full Version</div>
+    <h1>陪力卡 完整框架</h1>
+    <p class="sub">五個階段 ・ 十五個動作</p>
+    <span class="rule-gold"></span>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="lead">
+    <blockquote>
+      在社區營造與地方創生的現場，我們時常做著難以言說的事，像是接住一個猶豫的人、陪一個反覆的過程、把一個角色交出去、讓影響力擴出圈外。
+    </blockquote>
+    <p>
+      這些動作每天都在發生，但很少被清楚命名。<strong>陪力卡</strong>把它們整理成 <strong>15 張固定的卡</strong>，讓看不見的陪伴工作，被看見、被盤點、被傳承。
+    </p>
+    <p>
+      所有做陪伴工作的組織，都可以用這套卡盤點自己：從「接住」一個人開始，陪他「共學」、和他一起「做事」、進一步「給他角色」，最後讓陪伴「擴散」到更多的人與地方。五個階段，每一階段三個關鍵動作，共同構成一段完整的陪伴旅程。
+    </p>
+  </section>
+
+  <section class="overview">
+    <h2>一段完整的陪伴旅程</h2>
+    <div class="flow">
+      <span class="stage-pill">接住<small>Hold</small></span>
+      <span class="arrow">⟶</span>
+      <span class="stage-pill">共學<small>Learn</small></span>
+      <span class="arrow">⟶</span>
+      <span class="stage-pill">做事<small>Act</small></span>
+      <span class="arrow">⟶</span>
+      <span class="stage-pill">給角色<small>Role</small></span>
+      <span class="arrow">⟶</span>
+      <span class="stage-pill">擴散<small>Spread</small></span>
+    </div>
+  </section>
+
+  <!-- STAGE 1 -->
+  <section class="stage" id="g1">
+    <div class="stage-head">
+      <span class="stage-no">G1</span>
+      <h2>接住</h2>
+      <span class="facet">激勵面</span>
+      <span class="en">Hold</span>
+    </div>
+    <p class="stage-intro">
+      陪伴的起點，不是教他做什麼，而是讓他願意走進來、願意留下、願意不完美。這一階段處理的是「進場」——降低門檻、被記得、被允許做不好。
+    </p>
+
+    <div class="cards">
+      <div class="card-row">
+        <div class="card-id">G1-1<small>Stage 01 · 01</small></div>
+        <div class="card-body">
+          <div class="tagline">低壓進場</div>
+          <h3>低門檻進場</h3>
+          <p>把進來的門檻降到最低，讓他不用先是誰、不用先會什麼，就可以出現。這包含時間、語言、費用、社交壓力等各種門檻的降低。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G1-2<small>Stage 01 · 02</small></div>
+        <div class="card-body">
+          <div class="tagline">關係識別</div>
+          <h3>記得你</h3>
+          <p>第二次再來，他的名字、他上次說過的事，被我們接住、記住。關係不是服務流程,而是一次次的被辨認。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G1-3<small>Stage 01 · 03</small></div>
+        <div class="card-body">
+          <div class="tagline">安全承諾</div>
+          <h3>可以做不好</h3>
+          <p>明確告訴他：在這裡,做不好、講錯話、中途退出,都可以。把容錯寫進默契,而不是口頭安慰。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section class="stage" id="g2">
+    <div class="stage-head">
+      <span class="stage-no">G2</span>
+      <h2>共學</h2>
+      <span class="facet">陪伴面</span>
+      <span class="en">Learn</span>
+    </div>
+    <p class="stage-intro">
+      當他已經進來、願意停留,陪伴轉為「一起走」——用他的節奏、和他對等學習、允許沒有標準答案。這一階段拒絕「講者對聽眾」的不對等,改由陪伴者與參與者互為師徒。
+    </p>
+
+    <div class="cards">
+      <div class="card-row">
+        <div class="card-id">G2-1<small>Stage 02 · 01</small></div>
+        <div class="card-body">
+          <div class="tagline">節奏陪跑</div>
+          <h3>配合你的節奏</h3>
+          <p>不是把課程或計畫塞給他,而是看他走多快、停在哪,由陪伴者去配合。每個人有自己的時程,陪伴者的工作是跟上。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G2-2<small>Stage 02 · 02</small></div>
+        <div class="card-body">
+          <div class="tagline">共學互惠</div>
+          <h3>互為師徒</h3>
+          <p>承認「他也在教我們」。他帶進來的生命經驗、在地知識、異溫層視角,是組織學習的來源。對等,不是修辭,是被記錄、被採用。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G2-3<small>Stage 02 · 03</small></div>
+        <div class="card-body">
+          <div class="tagline">真實對話</div>
+          <h3>不給答案</h3>
+          <p>他提問時,我們先不急著解答。允許問題停留,讓他自己摸出答案,或一起承認「我們也不知道」。真實的對話比正確的答案重要。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section class="stage" id="g3">
+    <div class="stage-head">
+      <span class="stage-no">G3</span>
+      <h2>做事</h2>
+      <span class="facet">賦能面</span>
+      <span class="en">Act</span>
+    </div>
+    <p class="stage-intro">
+      從「學」到「做」的轉換點。把他帶到真實的現場,把實際的責任交到他手上,並讓他的產出被公共看見。陪伴的產出不只是感動,而是可以被看見的行動。
+    </p>
+
+    <div class="cards">
+      <div class="card-row">
+        <div class="card-id">G3-1<small>Stage 03 · 01</small></div>
+        <div class="card-body">
+          <div class="tagline">真實現場</div>
+          <h3>真的上場</h3>
+          <p>不是模擬、不是練習賽,而是把他放到真的會發生影響的現場。陪伴的目的,是讓他真的做出會被世界回應的事。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G3-2<small>Stage 03 · 02</small></div>
+        <div class="card-body">
+          <div class="tagline">任務授予</div>
+          <h3>交給你負責</h3>
+          <p>明確把某個區塊的決策權和責任交給他。不是打雜、不是配合,而是他是這件事的主責。授予責任,是相信最具體的形式。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G3-3<small>Stage 03 · 03</small></div>
+        <div class="card-body">
+          <div class="tagline">行動轉化</div>
+          <h3>公共可見</h3>
+          <p>他做出來的東西,能被圈外的人看見——一場活動、一支影片、一篇報導、一個據點。讓陪伴的成果從私密走向公共。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 4 -->
+  <section class="stage" id="g4">
+    <div class="stage-head">
+      <span class="stage-no">G4</span>
+      <h2>給角色</h2>
+      <span class="facet">賦權面</span>
+      <span class="en">Role</span>
+    </div>
+    <p class="stage-intro">
+      陪伴到一個段落,他不再只是「參與者」。我們給他一個正式的身份、讓他用他原本就有的專業、並帶他回頭看自己走多遠。角色,是陪伴關係轉為合作關係的交界。
+    </p>
+
+    <div class="cards">
+      <div class="card-row">
+        <div class="card-id">G4-1<small>Stage 04 · 01</small></div>
+        <div class="card-body">
+          <div class="tagline">角色授權</div>
+          <h3>給個正式身份</h3>
+          <p>給他一個名字——小導師、共同策展人、地方代表、計畫成員。身份不是頭銜,是讓他在對外時有立足之地。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G4-2<small>Stage 04 · 02</small></div>
+        <div class="card-body">
+          <div class="tagline">專業放大</div>
+          <h3>用你原本的專業</h3>
+          <p>讓他在這裡使用他本來就會的那件事——無論是餐飲、木工、寫程式、種田、養魚——而不是被規格化成某個「學員」的樣子。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G4-3<small>Stage 04 · 03</small></div>
+        <div class="card-body">
+          <div class="tagline">成就回看</div>
+          <h3>回頭看自己走多遠</h3>
+          <p>定期和他一起盤點「你從哪裡走到這裡」。不是評量、不是 KPI,而是讓他看見自己的變化,建立下一階段的動能。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 5 -->
+  <section class="stage" id="g5">
+    <div class="stage-head">
+      <span class="stage-no">G5</span>
+      <h2>擴散</h2>
+      <span class="facet">影響面</span>
+      <span class="en">Spread</span>
+    </div>
+    <p class="stage-intro">
+      陪伴的終點,不是留住他,而是讓影響力離開組織、離開我們,走到更遠的地方。他帶出去新的夥伴、我們把方法寫下來給別人用、甚至,我們允許他好好離開。
+    </p>
+
+    <div class="cards">
+      <div class="card-row">
+        <div class="card-id">G5-1<small>Stage 05 · 01</small></div>
+        <div class="card-body">
+          <div class="tagline">夥伴共創</div>
+          <h3>牽線合作</h3>
+          <p>透過他,我們認識新的地方、新的組織、新的領域。他成為節點,陪伴從一條線變成一張網。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G5-2<small>Stage 05 · 02</small></div>
+        <div class="card-body">
+          <div class="tagline">方法轉譯</div>
+          <h3>寫下怎麼做</h3>
+          <p>把「我們是怎麼陪伴的」轉譯成別人可以抄、可以改、可以拿去用的方法——像這份卡組一樣。知識不留在我們身上,才真的擴散。</p>
+        </div>
+      </div>
+      <div class="card-row">
+        <div class="card-id">G5-3<small>Stage 05 · 03</small></div>
+        <div class="card-body">
+          <div class="tagline">好好離開</div>
+          <h3>退場允許</h3>
+          <p>明確讓他知道——他可以走了、不用一直回來、不用一直感謝。陪伴不是綁定,是放手。一段關係能好好結束,才算完整。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="return">
+    <span class="tx">讀完了。回到首頁看看 2026 年度的實際應用 ⟶</span>
+    <a href="index.html">回首頁</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <span>旅學堂 Tamsui Traveler · 陪力系統</span>
+    </div>
+    <div>
+      <span>最後更新：2026-04-23</span>
+      <span>·</span>
+      <a href="https://github.com/Jiang-Yude/lxuetang-system" target="_blank" rel="noopener">GitHub Repo</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

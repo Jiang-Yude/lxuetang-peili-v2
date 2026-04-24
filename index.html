@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>旅學堂 陪力系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red-1:       #B64A32;          /* hero top */
+    --red-2:       #9B3A23;          /* hero bottom */
+    --red-ink:     #6E2614;
+    --cream:       #FBEFE8;          /* body soft pink-cream */
+    --cream-2:     #F5E3D7;
+    --paper:       #FFF8F3;
+    --ink:         #2B2018;
+    --ink-2:       #4A3B30;
+    --ink-3:       #6D5A4B;
+    --mute:        #9A8879;
+    --rule:        #E8D8C8;
+    --rule-strong: #C9B49E;
+    --gold:        #C79550;
+    --gold-soft:   #EFD9AC;
+
+    --serif:  "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif;
+    --sans:   "Noto Sans TC", "PingFang TC", -apple-system, "Helvetica Neue", system-ui, sans-serif;
+    --mono:   "Inter", ui-monospace, system-ui, sans-serif;
+
+    --maxw: 1120px;
+    --base: 17px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--cream);
+    font-size: var(--base);
+    line-height: 1.8;
+    letter-spacing: .01em;
+  }
+  img{max-width:100%; display:block}
+  a{color:inherit; text-decoration:none}
+
+  /* ─────────── TOP BAR (light, slim) ─────────── */
+  .topbar{
+    position: sticky; top:0; z-index:50;
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 10px 28px;
+    display:flex; align-items:center; gap:20px;
+  }
+  .brandmark{ display:flex; align-items:center; gap:10px; }
+  .brandmark img{ height: 30px; width:auto; }
+  .brandmark .wordmark{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .14em;
+    color: var(--red-ink);
+  }
+  .brandmark .wordmark small{
+    display:none;
+  }
+  .topnav{ margin-left:auto; display:flex; gap: 24px; align-items:center }
+  .topnav a{
+    font-size: 13.5px;
+    color: var(--ink-2);
+    padding: 2px 0;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .topnav a:hover{ color: var(--red-ink); border-color: var(--red-1); }
+
+  /* ─────────── HERO (solid red) ─────────── */
+  .hero{
+    position: relative;
+    background: var(--red-1);
+    color: #fff;
+    padding: 88px 28px 88px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    pointer-events:none;
+    opacity: .6;
+  }
+  .hero-inner{
+    position:relative;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .hero .ornament-top{
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin: 0 auto 36px;
+  }
+  .hero h1{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(42px, 5.4vw, 64px);
+    line-height: 1.2;
+    letter-spacing: .08em;
+    margin: 0 0 20px;
+    color: #fff;
+  }
+  .hero .subtitle{
+    font-family: var(--serif);
+    font-size: clamp(17px, 1.6vw, 20px);
+    color: rgba(255,255,255,.85);
+    font-weight: 400;
+    letter-spacing: .16em;
+    margin: 0 0 44px;
+  }
+  .hero .subtitle .sep{
+    color: var(--gold-soft);
+    margin: 0 12px;
+  }
+
+  .manifesto-pill{
+    display:inline-block;
+    padding: 18px 44px;
+    border: 1.5px solid rgba(255,230,200,.45);
+    border-radius: 999px;
+    font-family: var(--serif);
+    font-size: clamp(20px, 2vw, 24px);
+    font-weight: 500;
+    letter-spacing: .14em;
+    color: #fff;
+    background: rgba(0,0,0,.08);
+    margin-bottom: 48px;
+  }
+  .manifesto-pill .eq{
+    color: var(--gold-soft);
+    margin: 0 12px;
+    font-weight: 400;
+  }
+
+  .hero-copy{
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .hero-copy p{
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 2;
+    color: rgba(255,255,255,.9);
+    margin: 0 0 18px;
+  }
+  .hero-copy p:last-child{ margin-bottom: 0; }
+  .hero-copy strong{
+    color: #fff;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,220,180,.5);
+    padding-bottom: 1px;
+  }
+
+  .hero-wave{
+    position:absolute; bottom:-1px; left:0; right:0;
+    line-height: 0;
+  }
+  .hero-wave svg{ width:100%; height: 40px; display:block; }
+
+  /* ─────────── SECTION HEADS ─────────── */
+  section.body{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 80px 28px 40px;
+  }
+  .sec-head{
+    display:flex; align-items: center; gap: 14px;
+    margin-bottom: 40px;
+  }
+  .sec-head .bar{
+    width: 4px; height: 28px; background: var(--red-1); border-radius: 2px;
+  }
+  .sec-head h2{
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.8vw, 32px);
+    font-weight: 700;
+    letter-spacing: .1em;
+    margin: 0;
+    color: var(--red-ink);
+  }
+  .sec-head .tag{
+    margin-left:auto;
+    font-size: 13px;
+    letter-spacing: .18em;
+    color: var(--mute);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  /* ─────────── FRAMEWORK CARD ─────────── */
+  .fw-card{
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 36px 40px 40px;
+    margin-bottom: 28px;
+  }
+  .fw-card .kicker{
+    display:inline-block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--red-ink);
+    background: var(--cream-2);
+    border: 1px solid var(--rule);
+    padding: 6px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-family: var(--sans);
+  }
+  .fw-card h3{
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    margin: 0 0 18px;
+    color: var(--red-ink);
+  }
+  .fw-card p.desc{
+    font-family: var(--serif);
+    font-size: 16.5px;
+    line-height: 2;
+    color: var(--ink-2);
+    margin: 0 0 24px;
+    max-width: 70ch;
+  }
+  .fw-card ul.detail{
+    list-style: none; padding: 0;
+    margin: 0 0 28px;
+    border-top: 1px dashed var(--rule-strong);
+    padding-top: 18px;
+    display:flex; flex-direction: column; gap: 8px;
+  }
+  .fw-card ul.detail li{
+    font-size: 15px;
+    color: var(--ink-2);
+    display:flex; gap: 14px; align-items:baseline;
+  }
+  .fw-card ul.detail li::before{
+    content:"—"; color: var(--red-1); font-weight: 600;
+  }
+
+  /* ─────────── 5-CARD DECK WITH EXPAND ─────────── */
+  .deck-stage{
+    position: relative;
+    padding: 140px 20px 60px;   /* extra top room so sub-cards can fly up */
+    margin: 16px -12px 0;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(255,255,255,.8), transparent 60%),
+      linear-gradient(180deg, var(--cream-2), var(--paper));
+    border-radius: 12px;
+    border: 1px solid var(--rule);
+    overflow: visible;
+  }
+  .deck-stage .stage-hint{
+    position: absolute; top: 22px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .28em;
+    color: var(--mute);
+    text-transform: uppercase;
+  }
+  .deck-stage .stage-hint::before{
+    content:"↗ "; color: var(--red-1);
+  }
+
+  .deck{
+    display:flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 18px;
+    min-height: 240px;
+    position: relative;
+  }
+
+  .stage-group{
+    position: relative;
+    width: 130px;
+    height: 190px;
+    transition: transform .4s cubic-bezier(.22,.9,.25,1);
+  }
+  .stage-group:hover{ z-index: 10; }
+
+  /* main card — smaller */
+  .s-card{
+    position: absolute;
+    inset: 0;
+    width: 130px; height: 190px;
+    background: #fff;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: 0 2px 0 rgba(0,0,0,.04), 0 14px 28px -16px rgba(110,38,20,.3);
+    padding: 14px 12px;
+    display:flex; flex-direction: column;
+    transition:
+      transform .5s cubic-bezier(.22,.9,.25,1),
+      box-shadow .4s ease,
+      background .3s;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .s-card .roman{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .22em;
+    color: var(--red-1);
+    font-weight: 600;
+  }
+  .s-card .zh{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: .18em;
+    color: var(--ink);
+    writing-mode: vertical-rl;
+    align-self: center;
+    margin: auto 0;
+    line-height: 1.15;
+  }
+  .s-card .en{
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    color: var(--mute);
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .s-card .n{
+    font-family: var(--serif);
+    font-size: 11px;
+    color: var(--mute);
+    letter-spacing: .14em;
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  /* on hover: main card lifts and darkens */
+  .stage-group:hover .s-card{
+    transform: translateY(-6px) scale(1.04);
+    box-shadow: 0 22px 38px -18px rgba(110,38,20,.5);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .stage-group:hover .s-card .roman{ color: var(--gold-soft); }
+  .stage-group:hover .s-card .zh{ color: #fff; }
+  .stage-group:hover .s-card .en{ color: rgba(255,255,255,.65); }
+  .stage-group:hover .s-card .n{ color: rgba(255,255,255,.5); }
+
+  /* three sub-cards pop UP (above the big card) */
+  .sub-card{
+    position: absolute;
+    top: 0; left: 50%;
+    width: 108px; height: 150px;
+    margin-left: -54px;    /* centred */
+    background: #fff;
+    border: 1px solid var(--rule-strong);
+    border-radius: 5px;
+    box-shadow: 0 14px 24px -12px rgba(110,38,20,.3);
+    padding: 12px 10px;
+    display:flex; flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(0, 0) rotate(0) scale(.5);
+    transform-origin: 50% 100%;
+    transition:
+      transform .65s cubic-bezier(.22,.9,.25,1),
+      opacity .4s ease;
+    z-index: 5;   /* above the main card */
+  }
+  .sub-card .sub-n{
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--red-1);
+    font-weight: 600;
+  }
+  .sub-card .sub-title{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .08em;
+    color: var(--ink);
+    margin: auto 0;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .sub-card .sub-foot{
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .18em;
+    color: var(--mute);
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  /* fly up + fan out upwards */
+  .stage-group:hover .sub-card{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .stage-group:hover .sub-card:nth-child(1){
+    transform: translate(-118px, -130px) rotate(-12deg) scale(1);
+  }
+  .stage-group:hover .sub-card:nth-child(2){
+    transform: translate(0, -165px) rotate(0deg) scale(1);
+  }
+  .stage-group:hover .sub-card:nth-child(3){
+    transform: translate(118px, -130px) rotate(12deg) scale(1);
+  }
+
+  /* ── journey path: stages + arrows ── */
+  .journey-path{
+    margin-top: 56px;
+    padding: 24px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    border-top: 1px dashed var(--rule-strong);
+    border-bottom: 1px dashed var(--rule-strong);
+  }
+  .journey-path .jp-label{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .28em;
+    color: var(--mute);
+    text-transform: uppercase;
+    margin-right: 14px;
+  }
+  .journey-path .jp-label::before{
+    content: "⟶ "; color: var(--red-1);
+  }
+  .journey-path .step{
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--red-ink);
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(255,255,255,.5);
+    border: 1px solid transparent;
+    transition: background .25s, border-color .25s;
+  }
+  .journey-path .step small{
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    color: var(--mute);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 2px;
+    text-align: center;
+  }
+  .journey-path .step:hover{
+    background: #fff;
+    border-color: var(--red-1);
+  }
+  .journey-path .arrow-svg{
+    display: inline-flex;
+    color: var(--red-1);
+    opacity: .75;
+  }
+  .journey-path .arrow-svg svg{ width: 34px; height: 16px; }
+
+  .deck-cta{
+    display:flex; justify-content: center;
+    margin-top: 32px;
+  }
+  .deck-cta a{
+    font-family: var(--sans);
+    display:inline-flex; align-items:center; gap: 12px;
+    padding: 14px 28px;
+    background: var(--red-1);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 14px;
+    letter-spacing: .22em;
+    font-weight: 600;
+    box-shadow: 0 12px 24px -12px rgba(110,38,20,.5);
+    transition: background .25s, transform .25s;
+  }
+  .deck-cta a:hover{
+    background: var(--red-ink);
+    transform: translateY(-2px);
+  }
+  .deck-cta a .arrow{ transition: transform .3s; }
+  .deck-cta a:hover .arrow{ transform: translateX(6px); }
+
+  /* ─────────── REPORT CARDS ─────────── */
+  .report-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .report-card{
+    position:relative;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 10px;
+    padding: 28px 26px 24px;
+    display:flex; flex-direction:column;
+    min-height: 380px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .report-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 30px 50px -32px rgba(110,38,20,.35);
+    border-color: var(--red-1);
+  }
+  .report-card.draft{ opacity:.72; }
+  .report-card.draft:hover{ transform:none; box-shadow:none; border-color: var(--rule); cursor:default; }
+
+  .report-card .badges{
+    display:flex; gap: 8px; margin-bottom: 22px; flex-wrap:wrap;
+  }
+  .badge{
+    font-size: 12px;
+    letter-spacing: .12em;
+    padding: 5px 11px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-3);
+    border-radius: 4px;
+    background: var(--cream-2);
+    font-family: var(--sans);
+  }
+  .badge.internal{ border-color: #8A9270; color: #4F5840; background: #F4F3E6; }
+  .badge.external{ border-color: var(--red-1); color: var(--red-ink); background: #F5DFD3; }
+  .badge.detail{ border-color: var(--ink-3); color: var(--ink-2); background: #F0E4D7; }
+  .badge.simple{ border-color: var(--gold); color: #8C6122; background: #F7E8CC; }
+  .badge.wip{
+    border-color: var(--mute); color: var(--mute);
+    background: repeating-linear-gradient(-45deg, #F5E6D6, #F5E6D6 4px, #EAD7C2 4px, #EAD7C2 8px);
+  }
+  .report-card .year{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 42px;
+    color: var(--red-1);
+    line-height: 1;
+    letter-spacing: .04em;
+    margin-bottom: 8px;
+  }
+  .report-card h3{
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: .08em;
+    line-height: 1.5;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+  .report-card p.desc{
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-2);
+    margin: 0 0 24px;
+  }
+  .report-card .go{
+    margin-top:auto;
+    display:flex; align-items:center; justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    letter-spacing: .2em;
+    color: var(--red-ink);
+    font-weight: 600;
+    font-family: var(--sans);
+  }
+  .report-card .go .arrow{ transition: transform .3s; font-size: 15px; }
+  .report-card:hover .go .arrow{ transform: translateX(6px); }
+  .report-card.draft .go{ color: var(--mute); }
+
+  .corner-mark{
+    position:absolute; top:14px; right:18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    color: var(--mute);
+  }
+
+  /* ─────────── FOOTER ─────────── */
+  footer{
+    margin-top: 100px;
+    border-top: 1px solid var(--rule);
+    padding: 40px 28px;
+    background: var(--cream-2);
+  }
+  .foot-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display:flex; justify-content: space-between; align-items:center; gap: 24px;
+    flex-wrap:wrap;
+    font-size: 14px;
+    color: var(--ink-3);
+  }
+  .foot-inner a{
+    color: var(--red-ink);
+    border-bottom: 1px solid transparent;
+  }
+  .foot-inner a:hover{ border-color: var(--red-1); }
+  .foot-meta{ display: flex; gap: 20px; flex-wrap: wrap; align-items:center; }
+  .disclaimer{
+    color: var(--red-ink);
+    padding: 5px 14px;
+    border: 1px solid var(--red-1);
+    background: #F5DFD3;
+    font-size: 13px;
+    letter-spacing: .08em;
+    border-radius: 4px;
+  }
+
+  /* ─────────── RESPONSIVE ─────────── */
+  @media (max-width: 960px){
+    .report-grid{ grid-template-columns: 1fr; }
+    .topnav{ display:none; }
+    .deck{ flex-wrap: wrap; gap: 20px 8px; }
+    .stage-group{ margin: 0 !important; }
+    .stage-group:hover .sub-card{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brandmark" href="#top">
+      <img src="assets/logo.webp" alt="旅學堂 Tamsui Traveler" />
+      <span class="wordmark">旅學堂 <small>Tamsui Traveler</small></span>
+    </a>
+    <nav class="topnav">
+      <a href="index.html">首頁</a>
+      <a href="framework.html">完整框架</a>
+      <a href="#results">2026 年度成果</a>
+      <a href="https://www.tamsuitraveler.com/" target="_blank" rel="noopener">官方網站</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ─────────── HERO ─────────── -->
+<section id="top" class="hero">
+  <div class="hero-inner">
+    <div class="ornament-top"></div>
+    <h1>旅學堂 陪力系統</h1>
+    <p class="subtitle">陪力卡框架<span class="sep">·</span>成果事件鏈<span class="sep">·</span>影響力報告</p>
+
+    <div class="manifesto-pill">
+      陪力 <span class="eq">＝</span> 陪伴 <span class="eq">＋</span> 讓力量長出來
+    </div>
+
+    <div class="hero-copy">
+      <p>
+        旅學堂以<strong>「陪力卡」</strong>為核心方法論，在淡水陪伴女力導覽員、社區夥伴、消費者、家人、合作單位，透過五階段 × 十五動作的框架，把日常活動轉化為可被觀察、可被追蹤的社會影響力。
+      </p>
+      <p>
+        本站整合三個層次：<strong>陪力卡框架</strong>說明方法論、<strong>成果事件鏈</strong>以 17 位受訪者原話記錄每一條改變、<strong>影響力報告</strong>則是對外交付的整合成果。
+      </p>
+    </div>
+  </div>
+  <div class="hero-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 40" preserveAspectRatio="none"><path d="M0,40 L1440,40 L1440,0 C1200,32 960,32 720,16 C480,0 240,8 0,32 Z" fill="#FBEFE8"/></svg>
+  </div>
+</section>
+
+<!-- ─────────── FRAMEWORK ─────────── -->
+<section id="framework" class="body">
+  <div class="sec-head">
+    <div class="bar"></div>
+    <h2>陪力卡框架</h2>
+    <div class="tag">Framework · 方法論</div>
+  </div>
+
+  <div class="fw-card">
+    <div class="kicker">框架說明</div>
+    <h3>旅學堂 陪力卡介紹</h3>
+    <p class="desc">
+      介紹陪力卡的設計邏輯：五階段（接住／共學／做事／給角色／擴散）× 十五動作的社會影響力框架。內含：為什麼 ESG 中 S 最難評估、這套框架怎麼做出來的、15 張卡完整展開、盤點方法與使用原則。
+    </p>
+  </div>
+
+  <!-- 5-card deck -->
+  <div class="deck-stage">
+    <div class="stage-hint">Hover any stage · 5 × 3 = 15 actions</div>
+    <div class="deck">
+
+      <!-- Stage I · 接住 -->
+      <div class="stage-group">
+        <div class="sub-card"><span class="sub-n">G1-1</span><span class="sub-title">低門檻<br/>進場</span><span class="sub-foot">低壓進場</span></div>
+        <div class="sub-card"><span class="sub-n">G1-2</span><span class="sub-title">記得你</span><span class="sub-foot">關係識別</span></div>
+        <div class="sub-card"><span class="sub-n">G1-3</span><span class="sub-title">可以<br/>做不好</span><span class="sub-foot">安全承諾</span></div>
+        <div class="s-card">
+          <span class="roman">G1</span>
+          <span class="zh">接住</span>
+          <div>
+            <div class="en">Hold</div>
+            <div class="n">激勵面</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage II · 共學 -->
+      <div class="stage-group">
+        <div class="sub-card"><span class="sub-n">G2-1</span><span class="sub-title">配合你<br/>的節奏</span><span class="sub-foot">節奏陪跑</span></div>
+        <div class="sub-card"><span class="sub-n">G2-2</span><span class="sub-title">互為師徒</span><span class="sub-foot">共學互惠</span></div>
+        <div class="sub-card"><span class="sub-n">G2-3</span><span class="sub-title">不給答案</span><span class="sub-foot">真實對話</span></div>
+        <div class="s-card">
+          <span class="roman">G2</span>
+          <span class="zh">共學</span>
+          <div>
+            <div class="en">Learn</div>
+            <div class="n">陪伴面</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage III · 做事 -->
+      <div class="stage-group">
+        <div class="sub-card"><span class="sub-n">G3-1</span><span class="sub-title">真的上場</span><span class="sub-foot">真實現場</span></div>
+        <div class="sub-card"><span class="sub-n">G3-2</span><span class="sub-title">交給你<br/>負責</span><span class="sub-foot">任務授予</span></div>
+        <div class="sub-card"><span class="sub-n">G3-3</span><span class="sub-title">公共可見</span><span class="sub-foot">行動轉化</span></div>
+        <div class="s-card">
+          <span class="roman">G3</span>
+          <span class="zh">做事</span>
+          <div>
+            <div class="en">Act</div>
+            <div class="n">賦能面</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage IV · 給角色 -->
+      <div class="stage-group">
+        <div class="sub-card"><span class="sub-n">G4-1</span><span class="sub-title">給個<br/>正式身份</span><span class="sub-foot">角色授權</span></div>
+        <div class="sub-card"><span class="sub-n">G4-2</span><span class="sub-title">用你原本<br/>的專業</span><span class="sub-foot">專業放大</span></div>
+        <div class="sub-card"><span class="sub-n">G4-3</span><span class="sub-title">回頭看自己<br/>走多遠</span><span class="sub-foot">成就回看</span></div>
+        <div class="s-card">
+          <span class="roman">G4</span>
+          <span class="zh">給角色</span>
+          <div>
+            <div class="en">Role</div>
+            <div class="n">賦權面</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage V · 擴散 -->
+      <div class="stage-group">
+        <div class="sub-card"><span class="sub-n">G5-1</span><span class="sub-title">牽線合作</span><span class="sub-foot">夥伴共創</span></div>
+        <div class="sub-card"><span class="sub-n">G5-2</span><span class="sub-title">寫下怎麼做</span><span class="sub-foot">方法轉譯</span></div>
+        <div class="sub-card"><span class="sub-n">G5-3</span><span class="sub-title">退場允許</span><span class="sub-foot">好好離開</span></div>
+        <div class="s-card">
+          <span class="roman">G5</span>
+          <span class="zh">擴散</span>
+          <div>
+            <div class="en">Spread</div>
+            <div class="n">影響面</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="journey-path" aria-label="陪伴旅程路徑">
+      <span class="jp-label">一段完整的陪伴旅程</span>
+      <span class="step">接住<small>Hold</small></span>
+      <span class="arrow-svg" aria-hidden="true"><svg viewBox="0 0 34 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 8 H30 M22 2 L30 8 L22 14"/></svg></span>
+      <span class="step">共學<small>Learn</small></span>
+      <span class="arrow-svg" aria-hidden="true"><svg viewBox="0 0 34 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 8 H30 M22 2 L30 8 L22 14"/></svg></span>
+      <span class="step">做事<small>Act</small></span>
+      <span class="arrow-svg" aria-hidden="true"><svg viewBox="0 0 34 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 8 H30 M22 2 L30 8 L22 14"/></svg></span>
+      <span class="step">給角色<small>Role</small></span>
+      <span class="arrow-svg" aria-hidden="true"><svg viewBox="0 0 34 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M0 8 H30 M22 2 L30 8 L22 14"/></svg></span>
+      <span class="step">擴散<small>Spread</small></span>
+    </div>
+
+    <div class="deck-cta">
+      <a href="framework.html">
+        閱讀完整框架 <span class="arrow">⟶</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── 2026 RESULTS ─────────── -->
+<section id="results" class="body">
+  <div class="sec-head">
+    <div class="bar"></div>
+    <h2>2026 年度成果報告</h2>
+    <div class="tag">Annual Outcomes</div>
+  </div>
+
+  <div class="report-grid">
+
+    <a class="report-card" href="report.html">
+      <span class="corner-mark">N° 01</span>
+      <div class="badges">
+        <span class="badge external">對外</span>
+        <span class="badge detail">詳細版</span>
+      </div>
+      <div class="year">2026</div>
+      <h3>旅學堂<br/>影響力報告</h3>
+      <p class="desc">
+        對外交付的完整影響力報告。整合 2026 年度陪力卡系統的累積成果、量化指標、質性敘事與案例故事。提供基金會、合作單位、潛在夥伴參考。
+      </p>
+      <div class="go">
+        <span>閱讀報告</span>
+        <span class="arrow">⟶</span>
+      </div>
+    </a>
+
+    <a class="report-card" href="events.html">
+      <span class="corner-mark">N° 02</span>
+      <div class="badges">
+        <span class="badge internal">內部討論用</span>
+      </div>
+      <div class="year">2026</div>
+      <h3>成果事件鏈<br/>詳細記錄</h3>
+      <p class="desc">
+        依 17 位利害關係人逐字稿重建的完整事件鏈。包含 IOOVI 分析、五階段 × 面向雙軸統計、17 位人物卡與四欄標記，成果欄位以受訪者原話呈現。供團隊內部追蹤、討論、盤點使用。
+      </p>
+      <div class="go">
+        <span>進入事件鏈</span>
+        <span class="arrow">⟶</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-meta">
+      <span>最後更新：2026-04-23</span>
+      <span>·</span>
+      <a href="https://github.com/Jiang-Yude/lxuetang-system" target="_blank" rel="noopener">GitHub Repo</a>
+    </div>
+    <div class="disclaimer">本站為內部工作版，校稿完成前請勿對外分享。</div>
+  </div>
+</footer>
+
+</body>
+</html>
